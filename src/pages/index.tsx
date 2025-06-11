@@ -1,8 +1,13 @@
 import Imj from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react'
+type todo={
+  id:number,
+  name:string,
+  booli:boolean
+}
 const Index=()=>{
   const [oldvalue,newvalue]=useState<string>("")
-  const [oldarray,newarray]=useState<any>([])
+  const [oldarray,newarray]=useState<todo[]>([])
   const [oldcount,newcount]=useState<number>(1)
 useEffect(() => {
   if (typeof window !== "undefined") {
@@ -12,7 +17,7 @@ useEffect(() => {
     }
   }
 }, []);
-const handleclick=(e:React.MouseEvent<HTMLButtonElement>)=>{
+const handleclick=()=>{
   if(oldvalue==""){alert('pls write some task')}else{
 console.log(oldvalue)
 const firstuder={
@@ -31,17 +36,17 @@ localStorage.setItem("cart",JSON.stringify(oldarray))
 const handling=(e:React.ChangeEvent<HTMLInputElement>)=>{
 newvalue(e.target.value)
 }
-const makingtextunderline=(e:React.MouseEvent<HTMLButtonElement>,value:any)=>{
-const updatedArray = oldarray.map((curr: any) =>
+const makingtextunderline=(e:React.MouseEvent<HTMLButtonElement>,value:todo)=>{
+const updatedArray = oldarray.map((curr: todo) =>
     curr.id === value.id ? {...curr,booli:!curr.booli}:curr
   );
   newarray(updatedArray); // Replace with new array
 }
-const handledelete=(val:any)=>{
+const handledelete=(val:todo)=>{
   if(oldarray.length==1){
     newcount(1)
   }
-const newupdated=oldarray.filter((curr:any)=>curr.id!=val.id)
+const newupdated=oldarray.filter((curr:todo)=>curr.id!=val.id)
 newarray(newupdated)
 }
   return(
@@ -78,9 +83,9 @@ newarray(newupdated)
   }}
 />
 <h1 className='mt-3' style={{fontWeight:"bold"}}>Your Todos</h1>
-{oldarray?.map((curr:any)=>{
+{oldarray?.map((curr:todo):JSX.Element=>{
   return(
-    <div className='flex justify-between'>
+    <div className='flex justify-between' key={curr.id}>
       <div><h3>{curr.id}</h3></div>
 <h1 className={curr.booli ? "break-words w-[200px]" : " line-through w-[200px] break-words"}>{curr.name}</h1>
  <div><button onClick={(e)=>makingtextunderline(e,curr)}><Imj src={"./image/download.png"} alt='' width={20} height={45}/></button></div>
